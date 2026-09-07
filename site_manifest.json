@@ -1,0 +1,27 @@
+{
+  "manifest_version": "0.1.0-blockout",
+  "accuracy": "ESTIMATED_AWAITING_SURVEY",
+  "units": "metres",
+  "building": {
+    "podium": {"size": [58.0, 28.0, 9.6], "location": [0.0, 0.0, 4.8]},
+    "towers": [
+      {"name": "A", "size": [14.5, 19.0, 55.2], "location": [-19.0, 1.5, 37.2], "floors": 20},
+      {"name": "B", "size": [14.5, 19.0, 60.0], "location": [0.0, 1.5, 39.6], "floors": 22},
+      {"name": "C", "size": [14.5, 19.0, 55.2], "location": [19.0, 1.5, 37.2], "floors": 20}
+    ],
+    "floor_height": 2.4,
+    "facade_y": -14.12,
+    "shop_count": 10
+  },
+  "street": {
+    "road_size": [90.0, 15.0, 0.18],
+    "road_location": [0.0, -25.0, -0.09],
+    "pavement_size": [90.0, 5.0, 0.24],
+    "pavement_location": [0.0, -15.0, 0.12]
+  },
+  "review_cameras": [
+    {"name": "CAM_Street_Hero", "location": [38.0, -43.0, 5.0], "target": [0.0, 0.0, 24.0], "lens_mm": 42.0},
+    {"name": "CAM_Facade", "location": [0.0, -52.0, 7.0], "target": [0.0, 0.0, 25.0], "lens_mm": 48.0},
+    {"name": "CAM_Overview", "location": [58.0, -62.0, 52.0], "target": [0.0, 0.0, 25.0], "lens_mm": 52.0}
+  ]
+}

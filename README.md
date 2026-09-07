@@ -490,6 +490,17 @@ blender --background --python scripts/blender_material_setup.py
 
 The generated materials deliberately contain no embedded textures. `slot_bindings` is the explicit bridge between the architecture manifest's material slots and the canonical PBR definitions; the combined validator rejects missing or surplus bindings. Replace placeholders with licensed source textures, preserve the manifest IDs and Unreal mappings, and record formal binary versions externally before promoting the greybox to a surveyed production model.
 
+## First estate and street blockout
+
+The first recognisable modelling pass is driven by `site_manifest.json`. It creates a podium, three residential towers with floor/window rhythm, balconies, rooftop plant, ten shopfronts, three entrances, a provisional section of Avenida de Venceslau de Morais, pavement, road markings, and three review cameras:
+
+```bash
+blender --background --python scripts/blender_build_blockout.py -- \
+  --save build/PatTat_Blockout.blend
+```
+
+Every generated object is marked `ESTIMATED_AWAITING_SURVEY`. The dimensions are an editable modelling baseline—not a claim of surveyed accuracy—and must be calibrated against licensed photographs and measurements before the asset advances beyond blockout.
+
 ## Integration status
 
 The local Git object database contains PR #16 only. It supplies the five-module architecture contract and greybox generator. No remote, additional PR refs, or recoverable dangling commits are present in this checkout, so the PBR contract above completes the missing reviewable foundation locally rather than depending on unavailable PR branches.
