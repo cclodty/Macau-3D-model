@@ -1,0 +1,2 @@
+asset_id,category,importance,lod_status,material_group,texture_max_px,texel_density_px_m,collision,source_file,status
+SCENE_PENDING,scene,landmark,PENDING,PENDING,4096,512,PENDING,deliverables/master/macau_master.blend,BLOCKED_SOURCE_REQUIRED
