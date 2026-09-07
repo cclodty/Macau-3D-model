@@ -189,6 +189,11 @@ blender project.blend --background --python-expr "import bpy, macau_pipeline; ma
 - [ ] Audit 無負 scale、鏡像法線、重疊面、退化三角形及未套用 modifier。
 # Macau 3D Model
 
+本專案的 Unreal 資產製作規範集中於以下文件：
+
+- [Nanite、LOD 與碰撞製作規範](docs/unreal-asset-guidelines.md)
+# Macau 3D material contract
+
 本 repository 用於以 Blender 製作、並向 Unreal Engine 交付澳門街區資產。所有模型均以真實世界的米制尺寸製作；詳細工作規則見 [`blender/README.md`](blender/README.md)。
 
 ## 目錄
