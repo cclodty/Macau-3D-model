@@ -1,0 +1,2 @@
+camera_id,reference_id,focal_length_mm,sensor_width_mm,position_xyz_m,rotation_xyz_deg,reference_authorisation,overlay_path,status
+CAM_PENDING,REF_PENDING,PENDING,PENDING,PENDING,PENDING,PENDING,deliverables/screenshots/day/PENDING.png,BLOCKED_SOURCE_REQUIRED

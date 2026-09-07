@@ -1,0 +1,60 @@
+{
+  "render": {
+    "engine": "BLENDER_EEVEE_NEXT",
+    "resolution_x": 1920,
+    "resolution_y": 1080,
+    "resolution_percentage": 100
+  },
+  "looks": {
+    "neutral_overcast": {
+      "world_color": [0.72, 0.77, 0.82, 1.0],
+      "world_strength": 0.65,
+      "key_energy": 700.0,
+      "key_size": 18.0,
+      "key_location": [-8.0, -12.0, 20.0],
+      "key_target": [0.0, 0.0, 5.0],
+      "fill_energy": 350.0,
+      "fill_size": 12.0,
+      "fill_location": [12.0, 5.0, 10.0],
+      "fill_target": [0.0, 0.0, 3.0]
+    },
+    "subtropical_day": {
+      "world_color": [0.52, 0.68, 0.86, 1.0],
+      "world_strength": 0.85,
+      "sun_energy": 2.0,
+      "sun_angle_degrees": 7.5,
+      "sun_rotation_degrees": [28.0, -18.0, -32.0],
+      "haze_density": 0.008,
+      "haze_anisotropy": 0.35,
+      "haze_color": [0.72, 0.82, 0.9, 1.0]
+    },
+    "night": {
+      "world_color": [0.025, 0.04, 0.08, 1.0],
+      "world_strength": 0.12
+    }
+  },
+  "night_regions": {
+    "SHOP_SIGNS": [
+      {"name": "SHOP_SIGN_KEY", "type": "AREA", "location": [0.0, -3.0, 3.0], "target": [0.0, 0.0, 2.5], "energy": 500.0, "color": [1.0, 0.72, 0.45], "size": 4.0}
+    ],
+    "STREET_LAMPS": [
+      {"name": "STREET_LAMP_A", "type": "POINT", "location": [-8.0, -4.0, 6.0], "energy": 450.0, "color": [1.0, 0.68, 0.36], "radius": 0.8},
+      {"name": "STREET_LAMP_B", "type": "POINT", "location": [8.0, -4.0, 6.0], "energy": 450.0, "color": [1.0, 0.68, 0.36], "radius": 0.8}
+    ],
+    "RESIDENTIAL_WINDOWS": [
+      {"name": "WINDOWS_SOFT", "type": "AREA", "location": [0.0, 2.0, 12.0], "target": [0.0, -2.0, 8.0], "energy": 220.0, "color": [1.0, 0.82, 0.58], "size": 8.0}
+    ],
+    "VEHICLE_LIGHTS": [
+      {"name": "VEHICLE_HEADLIGHTS", "type": "AREA", "location": [-4.0, -10.0, 0.75], "target": [-4.0, 0.0, 0.5], "energy": 300.0, "color": [0.82, 0.9, 1.0], "size": 0.4}
+    ]
+  },
+  "cameras": [
+    {"name": "CAM_MURRAY_ROAD_PANORAMA", "purpose": "沿慕拉士馬路的街道全景", "location": [-28.0, -12.0, 1.7], "target": [0.0, 0.0, 5.0], "lens_mm": 50.0},
+    {"name": "CAM_PAT_TAT_FRONT", "purpose": "八達新邨主立面正面", "location": [0.0, -30.0, 1.65], "target": [0.0, 0.0, 6.0], "lens_mm": 50.0},
+    {"name": "CAM_PAT_TAT_OBLIQUE", "purpose": "八達新邨主立面斜角", "location": [-22.0, -24.0, 1.65], "target": [0.0, 0.0, 6.0], "lens_mm": 50.0},
+    {"name": "CAM_SHOPS_EYE", "purpose": "商舖人眼高度近景", "location": [-9.0, -8.0, 1.65], "target": [-4.0, 0.0, 2.0], "lens_mm": 42.0},
+    {"name": "CAM_ENTRANCE_EYE", "purpose": "入口人眼高度近景", "location": [7.0, -8.0, 1.65], "target": [4.0, 0.0, 2.1], "lens_mm": 45.0},
+    {"name": "CAM_HIGH_RELATIONSHIP", "purpose": "道路和樓宇關係高位總覽", "location": [-30.0, -35.0, 30.0], "target": [0.0, 0.0, 5.0], "lens_mm": 55.0},
+    {"name": "CAM_REFERENCE_MATCH_01", "purpose": "主要參考相片對照鏡頭（待現場相片校準）", "location": [18.0, -22.0, 1.65], "target": [0.0, 0.0, 5.0], "lens_mm": 50.0, "reference_status": "ALIGN_REQUIRED"}
+  ]
+}
