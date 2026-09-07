@@ -1,0 +1,92 @@
+{
+  "$schema": "./schemas/architecture-manifest.schema.json",
+  "manifest_version": "1.0.0",
+  "project": "Macau-3D-model",
+  "source_of_truth": {
+    "binary_asset_policy": "Formal .blend files are stored externally; this manifest and the repository scripts define the reviewable interchange contract.",
+    "coordinate_system": "Blender right-handed Z-up, metres; exported to Unreal Z-up centimetres by the FBX importer",
+    "shared_origin": "All modules use the surveyed project origin at Blender world (0, 0, 0)."
+  },
+  "modules": [
+    {
+      "id": "Architecture_Podium",
+      "description_zh_hant": "裙樓",
+      "blender_collection": "Architecture_Podium",
+      "unreal_asset_name": "SM_Architecture_Podium",
+      "unreal_content_path": "/Game/Macau/Architecture/Podium",
+      "coordinates": {"space": "PROJECT_SHARED_ORIGIN", "location_m": [0, 0, 0], "rotation_deg": [0, 0, 0], "scale": [1, 1, 1]},
+      "pivot_rule": "Pivot remains at the shared surveyed project origin; apply mesh transforms before export and do not centre on bounds.",
+      "collision": {"included": true, "strategy": "Simple UCX hulls; use UCX_SM_Architecture_Podium_## naming."},
+      "expected_material_slots": ["M_Podium_Facade", "M_Podium_Glass", "M_Podium_Soffit", "M_Podium_Service"],
+      "nanite_candidate": "YES_REVIEW_AFTER_FINAL_MESH",
+      "lod_or_distant_proxy": "Provide HLOD-ready simplified podium shell; author LOD1/LOD2 if Nanite is rejected.",
+      "fbx_filename": "SM_Architecture_Podium.fbx",
+      "completion_status": "GREYBOX_ONLY",
+      "binary_asset": {"version": "pending", "external_uri": "asset-registry://macau-3d-model/blender/Architecture_Podium/pending"}
+    },
+    {
+      "id": "Architecture_Towers",
+      "description_zh_hant": "住宅塔樓",
+      "blender_collection": "Architecture_Towers",
+      "unreal_asset_name": "SM_Architecture_Towers",
+      "unreal_content_path": "/Game/Macau/Architecture/Towers",
+      "coordinates": {"space": "PROJECT_SHARED_ORIGIN", "location_m": [0, 0, 0], "rotation_deg": [0, 0, 0], "scale": [1, 1, 1]},
+      "pivot_rule": "Pivot remains at the shared surveyed project origin so tower and podium align; never use per-object bounding-box pivots.",
+      "collision": {"included": true, "strategy": "Simple UCX volumes for accessible faces only; use UCX_SM_Architecture_Towers_## naming."},
+      "expected_material_slots": ["M_Towers_Facade", "M_Towers_Glass", "M_Towers_Balcony", "M_Towers_Roofline"],
+      "nanite_candidate": "YES",
+      "lod_or_distant_proxy": "Provide one merged skyline proxy for HLOD and non-Nanite fallback LOD1/LOD2.",
+      "fbx_filename": "SM_Architecture_Towers.fbx",
+      "completion_status": "GREYBOX_ONLY",
+      "binary_asset": {"version": "pending", "external_uri": "asset-registry://macau-3d-model/blender/Architecture_Towers/pending"}
+    },
+    {
+      "id": "Architecture_Rooftop",
+      "description_zh_hant": "天台及機電構築物",
+      "blender_collection": "Architecture_Rooftop",
+      "unreal_asset_name": "SM_Architecture_Rooftop",
+      "unreal_content_path": "/Game/Macau/Architecture/Rooftop",
+      "coordinates": {"space": "PROJECT_SHARED_ORIGIN", "location_m": [0, 0, 0], "rotation_deg": [0, 0, 0], "scale": [1, 1, 1]},
+      "pivot_rule": "Use the shared project origin, retaining surveyed elevations; apply transforms before export.",
+      "collision": {"included": false, "strategy": "No collision by default; add explicitly only for reachable maintenance areas."},
+      "expected_material_slots": ["M_Rooftop_Concrete", "M_Rooftop_Metal", "M_Rooftop_Plant"],
+      "nanite_candidate": "CONDITIONAL",
+      "lod_or_distant_proxy": "Merge small plant into a simplified rooftop silhouette for distant HLOD; cull sub-pixel equipment.",
+      "fbx_filename": "SM_Architecture_Rooftop.fbx",
+      "completion_status": "GREYBOX_ONLY",
+      "binary_asset": {"version": "pending", "external_uri": "asset-registry://macau-3d-model/blender/Architecture_Rooftop/pending"}
+    },
+    {
+      "id": "Architecture_Entrances",
+      "description_zh_hant": "住宅入口及大堂可見部分",
+      "blender_collection": "Architecture_Entrances",
+      "unreal_asset_name": "SM_Architecture_Entrances",
+      "unreal_content_path": "/Game/Macau/Architecture/Entrances",
+      "coordinates": {"space": "PROJECT_SHARED_ORIGIN", "location_m": [0, 0, 0], "rotation_deg": [0, 0, 0], "scale": [1, 1, 1]},
+      "pivot_rule": "Use the shared project origin to preserve facade alignment; entrance submeshes may have local origins but must export in world position.",
+      "collision": {"included": true, "strategy": "Simple doorway, floor and wall UCX shapes; keep openings traversable."},
+      "expected_material_slots": ["M_Entrance_Cladding", "M_Entrance_Glass", "M_Lobby_Floor", "M_Lobby_Wall"],
+      "nanite_candidate": "CONDITIONAL",
+      "lod_or_distant_proxy": "Entrances may disappear into the podium HLOD beyond the near-field range; provide LOD1 if separate.",
+      "fbx_filename": "SM_Architecture_Entrances.fbx",
+      "completion_status": "GREYBOX_ONLY",
+      "binary_asset": {"version": "pending", "external_uri": "asset-registry://macau-3d-model/blender/Architecture_Entrances/pending"}
+    },
+    {
+      "id": "Architecture_Shops",
+      "description_zh_hant": "沿街商舖及招牌區",
+      "blender_collection": "Architecture_Shops",
+      "unreal_asset_name": "SM_Architecture_Shops",
+      "unreal_content_path": "/Game/Macau/Architecture/Shops",
+      "coordinates": {"space": "PROJECT_SHARED_ORIGIN", "location_m": [0, 0, 0], "rotation_deg": [0, 0, 0], "scale": [1, 1, 1]},
+      "pivot_rule": "Use the shared project origin; retain storefront and sign positions relative to the podium facade.",
+      "collision": {"included": true, "strategy": "Simple storefront collision only; exclude thin signs and glazing from collision."},
+      "expected_material_slots": ["M_Shops_Frame", "M_Shops_Glass", "M_Shops_Interior", "M_Shops_Signage"],
+      "nanite_candidate": "NO_BY_DEFAULT",
+      "lod_or_distant_proxy": "Bake signage and storefront variation into the podium distant proxy; author LOD1 for close street views.",
+      "fbx_filename": "SM_Architecture_Shops.fbx",
+      "completion_status": "GREYBOX_ONLY",
+      "binary_asset": {"version": "pending", "external_uri": "asset-registry://macau-3d-model/blender/Architecture_Shops/pending"}
+    }
+  ]
+}
