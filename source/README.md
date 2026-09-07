@@ -1,3 +1,9 @@
+# Authorised source staging
+
+Place local source models and authorised reference photographs here. This path
+is ignored by Git to prevent accidental distribution. Maintain provenance in
+`deliverables/licenses.csv`; copy only approved final artefacts to deliverables.
+
 # 八達新邨測繪灰模
 
 本目錄以 `create_blockout.py` 作為可重現的 Blender 母檔來源。腳本建立全米制、真北朝 `+Y` 的灰模，並輸出：
