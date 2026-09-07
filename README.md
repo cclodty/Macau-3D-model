@@ -1,35 +1,47 @@
-# Macau architecture interchange source of truth
+# Macau 3D material contract
 
-This repository intentionally keeps the reviewable pipeline contract separate from large binary model files. `architecture_manifest.json` defines the five delivery modules, names, transforms, Unreal destinations, collision/material expectations, optimisation status, output filenames, progress, and external binary references. Update the manifest version and each module's `binary_asset` record when a formal `.blend` is promoted in the external asset registry.
+This repository tracks the lightweight, reviewable contract for Macau environment
+materials. Large photographs, baked normal maps, and atlases remain in the external
+object store; no production texture binary is committed here.
 
-## Validate the contract
+## Files
 
-The semantic validator uses only the Python standard library:
+* `config/material_manifest.json` is the source of truth for DCC names, Unreal
+  instances, PBR texture locations, color spaces, dimensions, density, defaults,
+  blending capabilities, provenance, and bundle version.
+* `config/texture_versions.json` pins each downloaded binary by SHA-256 and asset
+  version. Populate `files` when the `macau-textures-2026.09` bundle is released.
+* `config/material_slots.json` is the optional Blender/export material-slot inventory.
+* `previews/material_swatches.svg` is a small, repository-native review sheet; its
+  colors match each manifest fallback, not the absent production photography.
 
-```bash
-python3 scripts/validate_architecture_manifest.py
+## Usage
+
+Validate metadata while allowing absent external binaries:
+
+```sh
+python3 scripts/validate_materials.py
 ```
 
-The companion JSON Schema is suitable for editor and CI integration. If the optional `jsonschema` package is available, run:
+After downloading a binary bundle into `textures/`, enforce every texture:
 
-```bash
-python3 -m jsonschema -i architecture_manifest.json schemas/architecture-manifest.schema.json
+```sh
+python3 scripts/validate_materials.py --require-textures
 ```
 
-## Generate Blender collections and pipeline greyboxes
+The validator checks naming, Unreal texture suffixes, color space/channel intent,
+PNG bit depth and dimensions, power-of-two manifest dimensions, categories, and
+material-slot assignments. ORM uses **R=ambient occlusion, G=roughness,
+B=metallic**. Base color and emissive are sRGB; normal, ORM, and mask are linear.
 
-With Blender available, create five empty module Collections beneath `EXPORT_ARCHITECTURE`:
+Create or refresh Blender preview materials (Blender 4.x):
 
-```bash
-blender --background --python scripts/blender_architecture_setup.py -- \
-  --save build/architecture-empty.blend
+```sh
+blender scene.blend --background --python scripts/build_blender_materials.py -- \
+  --manifest config/material_manifest.json
 ```
 
-Add metre-scale placeholder geometry, collision hulls where required, save a disposable working file, and export five test FBXs:
-
-```bash
-blender --background --python scripts/blender_architecture_setup.py -- \
-  --greybox --export-dir build/fbx --save build/architecture-greybox.blend
-```
-
-The script reads the manifest rather than duplicating asset destinations and filenames. It sets metric scene units, uses the shared world origin contract, attaches searchable custom properties to the scene and Collections, creates placeholder material slots, and applies the documented `SM_…` / `UCX_…` naming templates. Generated `.blend` and FBX files are disposable validation artefacts and must not replace the external formal binaries.
+Missing base-color images receive an obvious procedural checker based on the
+manifest fallback. Missing normal/ORM/emissive maps retain scalar defaults. The
+builder stores wetness and aging support as material custom properties so an
+export pipeline can map them to `M_Macau_Surface` parameters.
