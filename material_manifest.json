@@ -1,0 +1,20 @@
+{
+  "manifest_version": "1.0.0",
+  "orm_channels": {"r": "ambient_occlusion", "g": "roughness", "b": "metallic"},
+  "materials": [
+    {"id": "wall_tile", "blender_name": "M_WallTile", "unreal_master": "M_WallTile_Master", "base_color": [0.42, 0.48, 0.43, 1.0], "roughness": 0.68, "metallic": 0.0, "uv_scale_m": 1.0},
+    {"id": "painted_concrete", "blender_name": "M_PaintedConcrete", "unreal_master": "M_Concrete_Master", "base_color": [0.55, 0.52, 0.45, 1.0], "roughness": 0.82, "metallic": 0.0, "uv_scale_m": 2.0},
+    {"id": "aged_glass", "blender_name": "M_AgedGlass", "unreal_master": "M_Glass_Master", "base_color": [0.13, 0.20, 0.21, 1.0], "roughness": 0.24, "metallic": 0.0, "uv_scale_m": 1.0},
+    {"id": "painted_metal", "blender_name": "M_PaintedMetal", "unreal_master": "M_Metal_Master", "base_color": [0.16, 0.18, 0.17, 1.0], "roughness": 0.56, "metallic": 0.65, "uv_scale_m": 1.0},
+    {"id": "asphalt", "blender_name": "M_Asphalt", "unreal_master": "M_Road_Master", "base_color": [0.055, 0.06, 0.065, 1.0], "roughness": 0.92, "metallic": 0.0, "uv_scale_m": 4.0},
+    {"id": "pavement", "blender_name": "M_Pavement", "unreal_master": "M_Pavement_Master", "base_color": [0.34, 0.32, 0.29, 1.0], "roughness": 0.86, "metallic": 0.0, "uv_scale_m": 2.0},
+    {"id": "signage", "blender_name": "M_Signage", "unreal_master": "M_Signage_Master", "base_color": [0.55, 0.08, 0.04, 1.0], "roughness": 0.42, "metallic": 0.0, "uv_scale_m": 1.0}
+  ],
+  "slot_bindings": {
+    "M_Podium_Facade": "wall_tile", "M_Podium_Glass": "aged_glass", "M_Podium_Soffit": "painted_concrete", "M_Podium_Service": "painted_metal",
+    "M_Towers_Facade": "wall_tile", "M_Towers_Glass": "aged_glass", "M_Towers_Balcony": "painted_metal", "M_Towers_Roofline": "painted_concrete",
+    "M_Rooftop_Concrete": "painted_concrete", "M_Rooftop_Metal": "painted_metal", "M_Rooftop_Plant": "painted_metal",
+    "M_Entrance_Cladding": "wall_tile", "M_Entrance_Glass": "aged_glass", "M_Lobby_Floor": "pavement", "M_Lobby_Wall": "painted_concrete",
+    "M_Shops_Frame": "painted_metal", "M_Shops_Glass": "aged_glass", "M_Shops_Interior": "painted_concrete", "M_Shops_Signage": "signage"
+  }
+}
