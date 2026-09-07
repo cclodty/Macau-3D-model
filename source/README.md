@@ -4,3 +4,31 @@ Place local source models and authorised reference photographs here. This path
 is ignored by Git to prevent accidental distribution. Maintain provenance in
 `deliverables/licenses.csv`; copy only approved final artefacts to deliverables.
 
+# 八達新邨測繪灰模
+
+本目錄以 `create_blockout.py` 作為可重現的 Blender 母檔來源。腳本建立全米制、真北朝 `+Y` 的灰模，並輸出：
+
+* `pak_tat_san_chun_master.blend`：道路、地界、建築量體、比例尺、北向及四個固定驗收相機；
+* `pak_tat_san_chun_blockout.blend`：同一幾何，不渲染驗收註記，供後續美術工作另存分支。
+
+## 建立檔案
+
+使用 Blender 4.0 或以上版本：
+
+```bash
+blender --background --python source/create_blockout.py
+```
+
+所有道路、樓宇和高度假設集中在腳本頂部及 `BUILDINGS` 表內，方便收到核准測量圖後逐項替換。場景原點定義為屋苑西北側兩條出入口道路的路緣切點；此交界在模型內以橙色十字和文字標示，容易由現場路緣重建。
+
+## 驗收及相機匹配
+
+1. 先檢查 Scene 的 Unit Scale 為 `1.0`、Length 為 `Meters`。
+2. 以 `驗收相機_01` 至 `04` 逐一渲染基準畫面；相機物件帶有「請勿移動」自訂屬性。
+3. 匯入已獲授權的街景照片作相機 Background Image，先用已知路緣及建築角點解算焦距，再只調相機位置／旋轉。
+4. 比對路緣、屋角與天台線後，回寫腳本中的道路闊度、輪廓和主要標高，重新產生 `.blend`，不要直接留下不可追蹤的幾何修改。
+5. 目前沒有隨倉庫提供可合法再分發、且帶測量控制點的街景；因此模型是**可驗收的初步測繪灰模，而非竣工測量成果**。提交施工或規劃用途前必須用現場測量／核准圖則覆核。
+
+## 圖層結構
+
+集合依序分為道路、行人設施、退界／佔地、裙樓／塔樓／天台、固定相機和驗收註記。物件名稱採中文並保留構件類型；主要量體另有 `主要標高_m` 自訂屬性。

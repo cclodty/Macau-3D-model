@@ -12,5 +12,9 @@ deliverables/reports/*
 !deliverables/reports/.gitkeep
 __pycache__/
 *.pyc
+build/
+*.blend1
+__pycache__/
 __pycache__/
 *.py[cod]
+*.zip
