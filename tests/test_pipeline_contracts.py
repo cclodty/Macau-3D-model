@@ -58,6 +58,13 @@ class PipelineContractTests(unittest.TestCase):
         self.assertIn("| 2 |", plan)
         self.assertIn("進行中", plan)
 
+    def test_handoff_keeps_required_local_commands(self):
+        handoff = (ROOT / "docs" / "handoff.md").read_text(encoding="utf-8")
+        self.assertIn("python3 scripts/validate_project.py", handoff)
+        self.assertIn("blender --background --python scripts/blender_build_blockout.py", handoff)
+        self.assertIn("ESTIMATED_AWAITING_SURVEY", handoff)
+        self.assertIn("calibration_manifest.json", handoff)
+
 
 if __name__ == "__main__":
     unittest.main()

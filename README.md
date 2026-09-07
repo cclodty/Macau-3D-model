@@ -1,9 +1,8 @@
 # Macau 3D model delivery workspace
 
-This repository defines a repeatable optimisation, validation, comparison, and
-delivery workflow for the Macau scene. Source geometry and reference
-photographs are not committed to this repository; place authorised inputs in
-`source/` and run the Blender pipeline before approving a delivery.
+For a new local Blender/Codex session, start with [`docs/handoff.md`](docs/handoff.md). It records the current phase, first-run commands, visual checks, reference handoff requirements, and the next recommended Codex instruction.
+
+This repository intentionally keeps the reviewable pipeline contract separate from large binary model files. `architecture_manifest.json` defines the five delivery modules, names, transforms, Unreal destinations, collision/material expectations, optimisation status, output filenames, progress, and external binary references. Update the manifest version and each module's `binary_asset` record when a formal `.blend` is promoted in the external asset registry.
 
 ## Quick start
 
