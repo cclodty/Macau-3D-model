@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "architecture-manifest.schema.json",
+  "type": "object",
+  "required": ["manifest_version", "project", "source_of_truth", "modules"],
+  "properties": {
+    "manifest_version": {"type": "string"},
+    "project": {"type": "string"},
+    "source_of_truth": {"type": "object"},
+    "modules": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["id", "description_zh_hant", "blender_collection", "unreal_asset_name", "unreal_content_path", "coordinates", "pivot_rule", "collision", "expected_material_slots", "nanite_candidate", "lod_or_distant_proxy", "fbx_filename", "completion_status", "binary_asset"]
+      }
+    }
+  }
+}
