@@ -11,6 +11,8 @@ from pathlib import Path
 
 import bpy
 
+from blender_material_setup import create_materials
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = REPO_ROOT / "architecture_manifest.json"
@@ -49,13 +51,6 @@ def clear_collection(collection):
         bpy.data.objects.remove(obj, do_unlink=True)
 
 
-def create_placeholder_material(name):
-    material = bpy.data.materials.get(name) or bpy.data.materials.new(name)
-    material.diffuse_color = (0.45, 0.45, 0.45, 1.0)
-    material["placeholder_only"] = True
-    return material
-
-
 def create_cube(collection, name, dimensions, location):
     bpy.ops.mesh.primitive_cube_add(size=1.0, location=location)
     obj = bpy.context.object
@@ -73,7 +68,7 @@ def create_greybox(collection, module):
     dimensions, location = GREYBOXES[module["id"]]
     mesh = create_cube(collection, module["unreal_asset_name"] + "_GREYBOX", dimensions, location)
     for slot in module["expected_material_slots"]:
-        mesh.data.materials.append(create_placeholder_material(slot))
+        mesh.data.materials.append(bpy.data.materials[slot])
 
     if module["collision"]["included"]:
         collision = create_cube(
@@ -161,6 +156,7 @@ def parse_args():
 def main():
     args = parse_args()
     manifest = load_manifest()
+    create_materials()
     configure_scene(manifest)
     configured = configure_collections(manifest, args.greybox)
     if args.export_dir:

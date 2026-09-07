@@ -1,0 +1,193 @@
+"""Build the first recognisable Pat Tat Estate street blockout in Blender.
+
+Dimensions are explicitly provisional until survey/photo matching is available.
+Run after opening Blender with:
+  blender --background --python scripts/blender_build_blockout.py -- --save build/PatTat_Blockout.blend
+"""
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+import bpy
+from mathutils import Vector
+
+from blender_architecture_setup import configure_collections, configure_scene, load_manifest
+from blender_material_setup import create_materials
+
+
+ROOT = Path(__file__).resolve().parents[1]
+SITE = ROOT / "site_manifest.json"
+
+
+def cube(collection, name, size, location, material, bevel=0.0):
+    bpy.ops.mesh.primitive_cube_add(size=1, location=location)
+    obj = bpy.context.object
+    obj.name = name
+    obj.dimensions = size
+    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+    for owner in list(obj.users_collection):
+        owner.objects.unlink(obj)
+    collection.objects.link(obj)
+    obj.data.materials.append(bpy.data.materials[material])
+    if bevel:
+        modifier = obj.modifiers.new("EdgeBevel", "BEVEL")
+        modifier.width = bevel
+        modifier.segments = 2
+    obj["accuracy"] = "ESTIMATED_AWAITING_SURVEY"
+    return obj
+
+
+def build_podium(collection, spec):
+    cube(collection, "SM_Architecture_Podium_Shell", spec["size"], spec["location"], "M_Podium_Facade", 0.12)
+    cube(collection, "SM_Architecture_Podium_Canopy", (56.0, 2.2, 0.35), (0, -15.0, 6.8), "M_Podium_Soffit", 0.08)
+
+
+def build_podium_columns(collection, facade_y, count):
+    spacing = 54.0 / (count - 1)
+    for index in range(count):
+        x = -27.0 + index * spacing
+        cube(collection, f"SM_Podium_Column_{index + 1:02d}", (0.48, 0.58, 6.2),
+             (x, facade_y - 0.42, 3.1), "M_Podium_Service", 0.04)
+
+
+def build_window_frame(collection, name, x, y, z, width):
+    for side in (-1, 1):
+        cube(collection, f"{name}_V{side:+d}", (0.08, 0.1, 1.3),
+             (x + side * width / 2, y - 0.02, z), "M_Towers_Balcony", 0.01)
+    for side in (-1, 1):
+        cube(collection, f"{name}_H{side:+d}", (width + 0.08, 0.1, 0.08),
+             (x, y - 0.02, z + side * 0.65), "M_Towers_Balcony", 0.01)
+
+
+def build_towers(collection, towers, floor_height, detail):
+    for tower in towers:
+        x, y, _ = tower["location"]
+        width, depth, _ = tower["size"]
+        cube(collection, f"SM_Architecture_Tower_{tower['name']}_Shell", tower["size"], tower["location"], "M_Towers_Facade", 0.08)
+        # Window ribbons make floor count and facade rhythm readable at street distance.
+        for floor in range(tower["floors"]):
+            window_z = 10.4 + floor * floor_height
+            for column in (-0.3, 0.3):
+                window_x = x + width * column
+                window_y = y - depth / 2 - 0.07
+                window_width = width * 0.36
+                cube(collection, f"SM_Window_{tower['name']}_{floor + 1:02d}_{column:+.1f}",
+                     (window_width, 0.12, 1.15), (window_x, window_y, window_z), "M_Towers_Glass")
+                cube(collection, f"SM_Balcony_{tower['name']}_{floor + 1:02d}_{column:+.1f}",
+                     (2.2, 1.15, 0.15), (window_x, y - depth / 2 - 0.62, window_z - 0.72), "M_Towers_Balcony", 0.03)
+                if detail["hero_window_frames"]:
+                    build_window_frame(collection, f"SM_WindowFrame_{tower['name']}_{floor + 1:02d}_{column:+.1f}",
+                                       window_x, window_y - 0.08, window_z, window_width)
+                if detail["hero_balcony_rails"]:
+                    cube(collection, f"SM_BalconyRail_{tower['name']}_{floor + 1:02d}_{column:+.1f}",
+                         (2.2, 0.08, 0.72), (window_x, y - depth / 2 - 1.18, window_z - 0.3), "M_Towers_Balcony", 0.02)
+
+
+def build_facade_services(collection, towers, floor_height, detail):
+    for tower in towers:
+        x, y, _ = tower["location"]
+        depth = tower["size"][1]
+        facade_y = y - depth / 2 - 0.82
+        for floor in range(tower["floors"]):
+            z = 10.35 + floor * floor_height
+            unit_count = detail["air_conditioners_per_floor"]
+            for unit in range(unit_count):
+                offset = 0.0 if unit_count == 1 else -2.8 + unit * 5.6 / (unit_count - 1)
+                cube(collection, f"SM_AC_{tower['name']}_{floor + 1:02d}_{unit + 1}",
+                     (0.9, 0.42, 0.62), (x + offset, facade_y, z - 0.15), "M_Towers_Roofline", 0.05)
+        for index, offset in enumerate(detail["service_pipe_offsets"], 1):
+            cube(collection, f"SM_ServicePipe_{tower['name']}_{index}",
+                 (0.16, 0.16, tower["size"][2] - 1.0),
+                 (x + offset, facade_y + 0.2, tower["location"][2]), "M_Towers_Roofline", 0.02)
+
+
+def build_rooftops(collection, towers):
+    for tower in towers:
+        x, y, z = tower["location"]
+        roof_z = z + tower["size"][2] / 2
+        cube(collection, f"SM_Rooftop_{tower['name']}_Plant", (6.5, 7.0, 3.0), (x, y, roof_z + 1.5), "M_Rooftop_Concrete", 0.08)
+        cube(collection, f"SM_Rooftop_{tower['name']}_Tank", (3.0, 3.0, 2.2), (x + 2.0, y, roof_z + 4.1), "M_Rooftop_Metal", 0.15)
+
+
+def build_frontage(entrances, shops, facade_y, shop_count):
+    spacing = 5.3
+    start = -(shop_count - 1) * spacing / 2
+    entrance_positions = {-16.0, 0.0, 16.0}
+    for index in range(shop_count):
+        x = start + index * spacing
+        cube(shops, f"SM_Shop_{index + 1:02d}_Frame", (4.7, 0.35, 3.9), (x, facade_y, 2.45), "M_Shops_Frame", 0.05)
+        cube(shops, f"SM_Shop_{index + 1:02d}_Glass", (4.15, 0.12, 2.65), (x, facade_y - 0.2, 2.05), "M_Shops_Glass")
+        cube(shops, f"SM_Shop_{index + 1:02d}_Sign", (4.4, 0.22, 0.72), (x, facade_y - 0.28, 4.25), "M_Shops_Signage", 0.04)
+        cube(shops, f"SM_Shop_{index + 1:02d}_Awning", (4.25, 1.25, 0.14),
+             (x, facade_y - 0.85, 3.62), "M_Shops_Frame", 0.04)
+    for index, x in enumerate(sorted(entrance_positions), 1):
+        cube(entrances, f"SM_Entrance_{index:02d}_Portal", (3.0, 0.65, 4.4), (x, facade_y - 0.45, 2.5), "M_Entrance_Cladding", 0.08)
+        cube(entrances, f"SM_Entrance_{index:02d}_Door", (2.2, 0.12, 3.35), (x, facade_y - 0.82, 2.05), "M_Entrance_Glass")
+
+
+def look_at(obj, target):
+    obj.rotation_euler = (Vector(target) - obj.location).to_track_quat("-Z", "Y").to_euler()
+
+
+def build_context(site):
+    root = bpy.data.collections.get("CONTEXT_SITE") or bpy.data.collections.new("CONTEXT_SITE")
+    if root.name not in bpy.context.scene.collection.children:
+        bpy.context.scene.collection.children.link(root)
+    for obj in list(root.objects):
+        bpy.data.objects.remove(obj, do_unlink=True)
+    street = site["street"]
+    cube(root, "SM_MouLaSi_Road_Blockout", street["road_size"], street["road_location"], "M_Asphalt")
+    cube(root, "SM_MouLaSi_Pavement_Blockout", street["pavement_size"], street["pavement_location"], "M_Pavement")
+    cube(root, "SM_MouLaSi_Kerb", (90.0, 0.28, 0.34), (0.0, street["kerb_y"], 0.17), "M_Pavement", 0.03)
+    for x in range(-40, 41, 8):
+        cube(root, f"SM_RoadMark_{x:+03d}", (4.0, 0.16, 0.025), (x, -25.0, 0.02), "M_PaintedConcrete")
+    for index, x in enumerate(street["drain_x"], 1):
+        cube(root, f"SM_Drain_{index:02d}", (0.72, 0.38, 0.05), (x, street["kerb_y"] - 0.24, 0.04), "M_PaintedMetal", 0.02)
+    for index, x in enumerate(street["street_lights_x"], 1):
+        cube(root, f"SM_StreetLight_{index:02d}_Pole", (0.18, 0.18, 7.0), (x, -16.0, 3.5), "M_PaintedMetal", 0.03)
+        cube(root, f"SM_StreetLight_{index:02d}_Head", (1.45, 0.32, 0.28), (x + 0.62, -16.0, 6.9), "M_PaintedMetal", 0.04)
+    for camera_spec in site["review_cameras"]:
+        data = bpy.data.cameras.get(camera_spec["name"]) or bpy.data.cameras.new(camera_spec["name"])
+        camera = bpy.data.objects.get(camera_spec["name"]) or bpy.data.objects.new(camera_spec["name"], data)
+        if camera.name not in root.objects:
+            root.objects.link(camera)
+        camera.location = camera_spec["location"]
+        data.lens = camera_spec["lens_mm"]
+        look_at(camera, camera_spec["target"])
+    bpy.context.scene.camera = bpy.data.objects[site["review_cameras"][0]["name"]]
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--save", type=Path, default=Path("build/PatTat_Blockout.blend"))
+    values = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
+    return parser.parse_args(values)
+
+
+def main():
+    args = parse_args()
+    site = json.loads(SITE.read_text(encoding="utf-8"))
+    architecture = load_manifest()
+    create_materials()
+    configure_scene(architecture)
+    collections = {
+        module["id"]: collection
+        for collection, module in configure_collections(architecture, False)
+    }
+    building = site["building"]
+    build_podium(collections["Architecture_Podium"], building["podium"])
+    build_podium_columns(collections["Architecture_Podium"], building["facade_y"], building["facade_detail"]["podium_column_count"])
+    build_towers(collections["Architecture_Towers"], building["towers"], building["floor_height"], building["facade_detail"])
+    build_facade_services(collections["Architecture_Towers"], building["towers"], building["floor_height"], building["facade_detail"])
+    build_rooftops(collections["Architecture_Rooftop"], building["towers"])
+    build_frontage(collections["Architecture_Entrances"], collections["Architecture_Shops"], building["facade_y"], building["shop_count"])
+    build_context(site)
+    save_path = args.save if args.save.is_absolute() else ROOT / args.save
+    save_path.parent.mkdir(parents=True, exist_ok=True)
+    bpy.ops.wm.save_as_mainfile(filepath=str(save_path))
+
+
+if __name__ == "__main__":
+    main()

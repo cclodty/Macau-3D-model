@@ -1,0 +1,23 @@
+{
+  "manifest_version": "0.1.0",
+  "site": "Pat Tat Estate, Avenida de Venceslau de Morais, Macau",
+  "target_epoch": null,
+  "calibration_status": "AWAITING_REFERENCE_MEDIA",
+  "sources": [],
+  "measurements": [
+    {"id": "podium_width", "value_m": 58.0, "method": "BLOCKOUT_ESTIMATE", "source_id": null, "confidence": "LOW"},
+    {"id": "podium_depth", "value_m": 28.0, "method": "BLOCKOUT_ESTIMATE", "source_id": null, "confidence": "LOW"},
+    {"id": "podium_height", "value_m": 9.6, "method": "BLOCKOUT_ESTIMATE", "source_id": null, "confidence": "LOW"},
+    {"id": "tower_a_height", "value_m": 55.2, "method": "BLOCKOUT_ESTIMATE", "source_id": null, "confidence": "LOW"},
+    {"id": "tower_b_height", "value_m": 60.0, "method": "BLOCKOUT_ESTIMATE", "source_id": null, "confidence": "LOW"},
+    {"id": "tower_c_height", "value_m": 55.2, "method": "BLOCKOUT_ESTIMATE", "source_id": null, "confidence": "LOW"},
+    {"id": "floor_height", "value_m": 2.4, "method": "BLOCKOUT_ESTIMATE", "source_id": null, "confidence": "LOW"},
+    {"id": "road_width", "value_m": 15.0, "method": "BLOCKOUT_ESTIMATE", "source_id": null, "confidence": "LOW"}
+  ],
+  "required_views": [
+    {"id": "facade_front", "purpose": "window, column, entrance and shop-bay rhythm", "source_id": null},
+    {"id": "facade_east_oblique", "purpose": "tower depth and podium setback", "source_id": null},
+    {"id": "facade_west_oblique", "purpose": "tower spacing and rooftop silhouette", "source_id": null},
+    {"id": "street_context", "purpose": "road, pavement and street-furniture alignment", "source_id": null}
+  ]
+}
