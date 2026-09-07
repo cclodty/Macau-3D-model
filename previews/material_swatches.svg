@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+  <rect width="800" height="500" fill="#181818"/>
+  <style>text{font:15px sans-serif;fill:#eee}.id{font:12px monospace;fill:#bbb}</style>
+  <g transform="translate(25 25)">
+    <g><rect width="140" height="140" rx="8" fill="#8c7a66"/><text y="165">外牆磁磚</text><text class="id" y="184">facade_tile</text></g>
+    <g transform="translate(155)"><rect width="140" height="140" rx="8" fill="#948c7a"/><text y="165">塗漆混凝土</text><text class="id" y="184">painted_concrete</text></g>
+    <g transform="translate(310)"><rect width="140" height="140" rx="8" fill="#3d4245"/><text y="165">鋁窗及金屬框</text><text class="id" y="184">aluminum_windows</text></g>
+    <g transform="translate(465)"><rect width="140" height="140" rx="8" fill="#334c47" fill-opacity=".65"/><text y="165">舊玻璃</text><text class="id" y="184">old_glass</text></g>
+    <g transform="translate(620)"><rect width="140" height="140" rx="8" fill="#1a1714"/><text y="165">鐵閘及欄杆</text><text class="id" y="184">iron_gates</text></g>
+    <g transform="translate(0 225)"><rect width="140" height="140" rx="8" fill="#151513"/><text y="165">瀝青路面</text><text class="id" y="184">asphalt</text></g>
+    <g transform="translate(155 225)"><rect width="140" height="140" rx="8" fill="#7a786e"/><text y="165">路緣石</text><text class="id" y="184">curbstone</text></g>
+    <g transform="translate(310 225)"><rect width="140" height="140" rx="8" fill="#856647"/><text y="165">行人路鋪裝</text><text class="id" y="184">sidewalk_paving</text></g>
+    <g transform="translate(465 225)"><rect width="140" height="140" rx="8" fill="#e5330a"/><text y="165">招牌 / 燈箱</text><text class="id" y="184">signage_emissive</text></g>
+    <g transform="translate(620 225)"><rect width="140" height="140" rx="8" fill="#1a1f14"/><text y="165">潮濕污跡 overlay</text><text class="id" y="184">weathering_overlay</text></g>
+  </g>
+</svg>
