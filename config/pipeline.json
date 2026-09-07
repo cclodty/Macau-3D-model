@@ -1,0 +1,19 @@
+{
+  "target": "desktop",
+  "unit_scale_meters": 1.0,
+  "texel_density_px_per_meter": 512,
+  "texture_budgets": {
+    "landmark": 4096,
+    "building": 2048,
+    "street": 1024,
+    "prop": 512
+  },
+  "lod_screen_ratios": {
+    "LOD0": 1.0,
+    "LOD1": 0.5,
+    "LOD2": 0.2,
+    "LOD3": 0.05
+  },
+  "allowed_material_suffixes": ["_desktop", "_shared"],
+  "exports": ["gltf", "fbx"]
+}

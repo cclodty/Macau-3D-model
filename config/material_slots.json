@@ -1,0 +1,4 @@
+{
+  "objects": [],
+  "note": "Export from Blender as {objects:[{name, material_slots:[MAT_Name]}]}; validator rejects unknown or empty slots."
+}
