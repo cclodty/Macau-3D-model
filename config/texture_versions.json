@@ -1,0 +1,130 @@
+{
+  "bundle_version": "macau-textures-2026.09",
+  "hash_algorithm": "sha256",
+  "files": {
+    "facade/tile_BC.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "facade/tile_N.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "facade/tile_ORM.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "facade/tile_M.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "walls/painted_concrete_BC.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "walls/painted_concrete_N.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "walls/painted_concrete_ORM.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "walls/painted_concrete_M.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "metal/aluminum_BC.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "metal/aluminum_N.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "metal/aluminum_ORM.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "metal/aluminum_M.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "glass/old_glass_BC.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "glass/old_glass_N.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "glass/old_glass_ORM.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "glass/old_glass_M.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "metal/iron_gate_BC.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "metal/iron_gate_N.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "metal/iron_gate_ORM.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "metal/iron_gate_M.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "ground/asphalt_BC.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "ground/asphalt_N.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "ground/asphalt_ORM.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "ground/asphalt_M.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "ground/curbstone_BC.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "ground/curbstone_N.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "ground/curbstone_ORM.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "ground/curbstone_M.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "ground/sidewalk_BC.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "ground/sidewalk_N.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "ground/sidewalk_ORM.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "ground/sidewalk_M.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "signage/lightbox_BC.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "signage/lightbox_N.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "signage/lightbox_ORM.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "signage/lightbox_E.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "signage/lightbox_M.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "overlays/weathering_BC.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "overlays/weathering_N.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "overlays/weathering_ORM.png": {
+      "version": "macau-textures-2026.09"
+    },
+    "overlays/weathering_M.png": {
+      "version": "macau-textures-2026.09"
+    }
+  },
+  "note": "Each path is version-pinned. Add sha256 alongside version after publishing the external bundle."
+}
