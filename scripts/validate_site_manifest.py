@@ -24,6 +24,9 @@ def validate(site):
         errors.append("podium_column_count must be an integer of at least two")
     if not detail.get("service_pipe_offsets"):
         errors.append("at least one service pipe offset is required")
+    for field in ("hero_window_frames", "hero_balcony_rails"):
+        if not isinstance(detail.get(field), bool):
+            errors.append(f"{field} must be boolean")
     for name, value in (("floor_height", building.get("floor_height")),):
         if not isinstance(value, (int, float)) or isinstance(value, bool) or value <= 0:
             errors.append(f"{name} must be a positive number")

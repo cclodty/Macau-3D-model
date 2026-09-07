@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from validate_architecture_manifest import main as validate_architecture
+from validate_calibration_manifest import main as validate_calibration
 from validate_material_manifest import main as validate_materials
 from validate_site_manifest import main as validate_site
 
@@ -28,5 +29,5 @@ def validate_bindings():
 
 
 if __name__ == "__main__":
-    results = [validate_architecture(), validate_materials(), validate_site(), validate_bindings()]
+    results = [validate_architecture(), validate_materials(), validate_site(), validate_calibration(), validate_bindings()]
     raise SystemExit(1 if any(results) else 0)

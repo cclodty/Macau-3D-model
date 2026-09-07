@@ -15,7 +15,9 @@
     "facade_detail": {
       "air_conditioners_per_floor": 2,
       "service_pipe_offsets": [-5.8, 5.8],
-      "podium_column_count": 11
+      "podium_column_count": 11,
+      "hero_window_frames": true,
+      "hero_balcony_rails": true
     }
   },
   "street": {

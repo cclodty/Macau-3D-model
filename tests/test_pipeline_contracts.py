@@ -10,6 +10,7 @@ SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
 from validate_architecture_manifest import validate as validate_architecture  # noqa: E402
+from validate_calibration_manifest import validate as validate_calibration  # noqa: E402
 from validate_material_manifest import validate as validate_materials  # noqa: E402
 from validate_site_manifest import validate as validate_site  # noqa: E402
 
@@ -20,11 +21,13 @@ class PipelineContractTests(unittest.TestCase):
         cls.architecture = json.loads((ROOT / "architecture_manifest.json").read_text(encoding="utf-8"))
         cls.materials = json.loads((ROOT / "material_manifest.json").read_text(encoding="utf-8"))
         cls.site = json.loads((ROOT / "site_manifest.json").read_text(encoding="utf-8"))
+        cls.calibration = json.loads((ROOT / "references" / "calibration_manifest.json").read_text(encoding="utf-8"))
 
     def test_checked_in_manifests_are_valid(self):
         self.assertEqual([], validate_architecture(self.architecture))
         self.assertEqual([], validate_materials(self.materials))
         self.assertEqual([], validate_site(self.site))
+        self.assertEqual([], validate_calibration(self.calibration))
 
     def test_every_architecture_slot_has_exactly_one_binding(self):
         expected = {
@@ -38,6 +41,11 @@ class PipelineContractTests(unittest.TestCase):
         changed = copy.deepcopy(self.materials)
         changed["slot_bindings"]["M_Podium_Facade"] = "missing_material"
         self.assertTrue(any("unknown material" in error for error in validate_materials(changed)))
+
+    def test_estimates_cannot_be_marked_calibrated(self):
+        changed = copy.deepcopy(self.calibration)
+        changed["calibration_status"] = "CALIBRATED"
+        self.assertTrue(any("CALIBRATED requires" in error for error in validate_calibration(changed)))
 
     def test_blender_entry_points_exist(self):
         self.assertTrue((SCRIPTS / "blender_architecture_setup.py").is_file())

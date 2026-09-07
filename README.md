@@ -503,6 +503,12 @@ Every generated object is marked `ESTIMATED_AWAITING_SURVEY`. The dimensions are
 
 The current second-stage pass adds facade air-conditioning units and service pipes, a podium column rhythm, individual shop awnings, kerbs, drains, and street lights. See `docs/production-stages.md` for the seven-stage production and acceptance plan.
 
+## Phase-three calibration
+
+The third-stage generator adds separate window frames and balcony rails for the Hero facade. Its geometry remains provisional. `references/calibration_manifest.json` is the evidence ledger for dimensions and the four required photo-matching views; the validator prevents a file containing estimates from being labelled `CALIBRATED`.
+
+Register only reference media that the project is permitted to use. Give each source a stable ID, capture date/epoch, provenance, licence, and repository-relative or controlled external URI. Replace a measurement's `BLOCKOUT_ESTIMATE` only when its `source_id` points to that registered evidence. Run `python3 scripts/validate_project.py` after every calibration edit.
+
 ## Integration status
 
 The architecture, PBR, and site manifests are now consumed by one blockout build entry point and checked by one project validator. PR #17 established the integrated foundation; subsequent modelling passes should change the manifests and generators together rather than introducing independent binary-only state.

@@ -52,7 +52,16 @@ def build_podium_columns(collection, facade_y, count):
              (x, facade_y - 0.42, 3.1), "M_Podium_Service", 0.04)
 
 
-def build_towers(collection, towers, floor_height):
+def build_window_frame(collection, name, x, y, z, width):
+    for side in (-1, 1):
+        cube(collection, f"{name}_V{side:+d}", (0.08, 0.1, 1.3),
+             (x + side * width / 2, y - 0.02, z), "M_Towers_Balcony", 0.01)
+    for side in (-1, 1):
+        cube(collection, f"{name}_H{side:+d}", (width + 0.08, 0.1, 0.08),
+             (x, y - 0.02, z + side * 0.65), "M_Towers_Balcony", 0.01)
+
+
+def build_towers(collection, towers, floor_height, detail):
     for tower in towers:
         x, y, _ = tower["location"]
         width, depth, _ = tower["size"]
@@ -61,10 +70,19 @@ def build_towers(collection, towers, floor_height):
         for floor in range(tower["floors"]):
             window_z = 10.4 + floor * floor_height
             for column in (-0.3, 0.3):
+                window_x = x + width * column
+                window_y = y - depth / 2 - 0.07
+                window_width = width * 0.36
                 cube(collection, f"SM_Window_{tower['name']}_{floor + 1:02d}_{column:+.1f}",
-                     (width * 0.36, 0.12, 1.15), (x + width * column, y - depth / 2 - 0.07, window_z), "M_Towers_Glass")
+                     (window_width, 0.12, 1.15), (window_x, window_y, window_z), "M_Towers_Glass")
                 cube(collection, f"SM_Balcony_{tower['name']}_{floor + 1:02d}_{column:+.1f}",
-                     (2.2, 1.15, 0.15), (x + width * column, y - depth / 2 - 0.62, window_z - 0.72), "M_Towers_Balcony", 0.03)
+                     (2.2, 1.15, 0.15), (window_x, y - depth / 2 - 0.62, window_z - 0.72), "M_Towers_Balcony", 0.03)
+                if detail["hero_window_frames"]:
+                    build_window_frame(collection, f"SM_WindowFrame_{tower['name']}_{floor + 1:02d}_{column:+.1f}",
+                                       window_x, window_y - 0.08, window_z, window_width)
+                if detail["hero_balcony_rails"]:
+                    cube(collection, f"SM_BalconyRail_{tower['name']}_{floor + 1:02d}_{column:+.1f}",
+                         (2.2, 0.08, 0.72), (window_x, y - depth / 2 - 1.18, window_z - 0.3), "M_Towers_Balcony", 0.02)
 
 
 def build_facade_services(collection, towers, floor_height, detail):
@@ -161,7 +179,7 @@ def main():
     building = site["building"]
     build_podium(collections["Architecture_Podium"], building["podium"])
     build_podium_columns(collections["Architecture_Podium"], building["facade_y"], building["facade_detail"]["podium_column_count"])
-    build_towers(collections["Architecture_Towers"], building["towers"], building["floor_height"])
+    build_towers(collections["Architecture_Towers"], building["towers"], building["floor_height"], building["facade_detail"])
     build_facade_services(collections["Architecture_Towers"], building["towers"], building["floor_height"], building["facade_detail"])
     build_rooftops(collections["Architecture_Rooftop"], building["towers"])
     build_frontage(collections["Architecture_Entrances"], collections["Architecture_Shops"], building["facade_y"], building["shop_count"])
