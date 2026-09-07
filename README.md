@@ -159,3 +159,39 @@ Blender Collection 固定分為 `00_REF`、`10_HERO`、`20_CONTEXT`、`30_SKYLIN
 8. 交付資產清單與輸出紀錄，列明 Blender 版本、輸出日期、glTF／FBX 設定、預算統計、未驗證資料及已知差異。
 
 若平台、鏡頭路線或測繪資料其後確定，本文件中的暫定效能數字、LOD 距離與標高佔位必須在正式製作前更新並重新確認。
+# Macau streetscape asset kit
+
+This repository contains a lightweight, modular streetscape kit for building
+Macau road scenes.  The geometry is stored as Wavefront OBJ so it can be used
+directly in Blender, Godot, Unity, Unreal, or a GIS/DCC pipeline without a
+proprietary dependency.
+
+## Contents
+
+- `assets/environment/` — pavement, curb, drain, asphalt, manhole, and road
+  marking modules.
+- `assets/street_furniture/` — Macau-oriented lights, signals, signs, railings,
+  utilities, bus-stop, and parking objects.
+- `assets/urban_details/` — pipes, cables, condensate drains, CCTV, drying
+  racks, security grilles, lightboxes, and small storefront equipment.
+- `assets/mobility/` — left-hand-traffic vehicles and compact pedestrian
+  silhouettes.
+- `scenes/macau_street_layout.json` — explicit, deterministic placement data.
+- `tools/generate_assets.py` — dependency-free source generator for every OBJ.
+
+All dimensions and transforms are in metres.  Object forward is local **+Y**,
+up is **+Z**, and rotations use degrees in XYZ order.  The sample street uses
+left-hand traffic.  Pedestrians and vehicles are kept outside the four
+documented building-inspection view corridors.
+
+## Regenerate and validate
+
+```bash
+python3 tools/generate_assets.py
+python3 tools/validate_scene.py
+```
+
+The layout deliberately contains no random placement. Each instance has a
+stable ID, exact transform, curb offset, and placement note so transforms can
+be replaced one-by-one with photo-survey measurements when reference images or
+survey control points are available.
