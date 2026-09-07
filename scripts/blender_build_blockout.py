@@ -7,7 +7,6 @@ Run after opening Blender with:
 
 import argparse
 import json
-import math
 import sys
 from pathlib import Path
 
@@ -45,6 +44,14 @@ def build_podium(collection, spec):
     cube(collection, "SM_Architecture_Podium_Canopy", (56.0, 2.2, 0.35), (0, -15.0, 6.8), "M_Podium_Soffit", 0.08)
 
 
+def build_podium_columns(collection, facade_y, count):
+    spacing = 54.0 / (count - 1)
+    for index in range(count):
+        x = -27.0 + index * spacing
+        cube(collection, f"SM_Podium_Column_{index + 1:02d}", (0.48, 0.58, 6.2),
+             (x, facade_y - 0.42, 3.1), "M_Podium_Service", 0.04)
+
+
 def build_towers(collection, towers, floor_height):
     for tower in towers:
         x, y, _ = tower["location"]
@@ -58,6 +65,24 @@ def build_towers(collection, towers, floor_height):
                      (width * 0.36, 0.12, 1.15), (x + width * column, y - depth / 2 - 0.07, window_z), "M_Towers_Glass")
                 cube(collection, f"SM_Balcony_{tower['name']}_{floor + 1:02d}_{column:+.1f}",
                      (2.2, 1.15, 0.15), (x + width * column, y - depth / 2 - 0.62, window_z - 0.72), "M_Towers_Balcony", 0.03)
+
+
+def build_facade_services(collection, towers, floor_height, detail):
+    for tower in towers:
+        x, y, _ = tower["location"]
+        depth = tower["size"][1]
+        facade_y = y - depth / 2 - 0.82
+        for floor in range(tower["floors"]):
+            z = 10.35 + floor * floor_height
+            unit_count = detail["air_conditioners_per_floor"]
+            for unit in range(unit_count):
+                offset = 0.0 if unit_count == 1 else -2.8 + unit * 5.6 / (unit_count - 1)
+                cube(collection, f"SM_AC_{tower['name']}_{floor + 1:02d}_{unit + 1}",
+                     (0.9, 0.42, 0.62), (x + offset, facade_y, z - 0.15), "M_Towers_Roofline", 0.05)
+        for index, offset in enumerate(detail["service_pipe_offsets"], 1):
+            cube(collection, f"SM_ServicePipe_{tower['name']}_{index}",
+                 (0.16, 0.16, tower["size"][2] - 1.0),
+                 (x + offset, facade_y + 0.2, tower["location"][2]), "M_Towers_Roofline", 0.02)
 
 
 def build_rooftops(collection, towers):
@@ -77,6 +102,8 @@ def build_frontage(entrances, shops, facade_y, shop_count):
         cube(shops, f"SM_Shop_{index + 1:02d}_Frame", (4.7, 0.35, 3.9), (x, facade_y, 2.45), "M_Shops_Frame", 0.05)
         cube(shops, f"SM_Shop_{index + 1:02d}_Glass", (4.15, 0.12, 2.65), (x, facade_y - 0.2, 2.05), "M_Shops_Glass")
         cube(shops, f"SM_Shop_{index + 1:02d}_Sign", (4.4, 0.22, 0.72), (x, facade_y - 0.28, 4.25), "M_Shops_Signage", 0.04)
+        cube(shops, f"SM_Shop_{index + 1:02d}_Awning", (4.25, 1.25, 0.14),
+             (x, facade_y - 0.85, 3.62), "M_Shops_Frame", 0.04)
     for index, x in enumerate(sorted(entrance_positions), 1):
         cube(entrances, f"SM_Entrance_{index:02d}_Portal", (3.0, 0.65, 4.4), (x, facade_y - 0.45, 2.5), "M_Entrance_Cladding", 0.08)
         cube(entrances, f"SM_Entrance_{index:02d}_Door", (2.2, 0.12, 3.35), (x, facade_y - 0.82, 2.05), "M_Entrance_Glass")
@@ -95,8 +122,14 @@ def build_context(site):
     street = site["street"]
     cube(root, "SM_MouLaSi_Road_Blockout", street["road_size"], street["road_location"], "M_Asphalt")
     cube(root, "SM_MouLaSi_Pavement_Blockout", street["pavement_size"], street["pavement_location"], "M_Pavement")
+    cube(root, "SM_MouLaSi_Kerb", (90.0, 0.28, 0.34), (0.0, street["kerb_y"], 0.17), "M_Pavement", 0.03)
     for x in range(-40, 41, 8):
         cube(root, f"SM_RoadMark_{x:+03d}", (4.0, 0.16, 0.025), (x, -25.0, 0.02), "M_PaintedConcrete")
+    for index, x in enumerate(street["drain_x"], 1):
+        cube(root, f"SM_Drain_{index:02d}", (0.72, 0.38, 0.05), (x, street["kerb_y"] - 0.24, 0.04), "M_PaintedMetal", 0.02)
+    for index, x in enumerate(street["street_lights_x"], 1):
+        cube(root, f"SM_StreetLight_{index:02d}_Pole", (0.18, 0.18, 7.0), (x, -16.0, 3.5), "M_PaintedMetal", 0.03)
+        cube(root, f"SM_StreetLight_{index:02d}_Head", (1.45, 0.32, 0.28), (x + 0.62, -16.0, 6.9), "M_PaintedMetal", 0.04)
     for camera_spec in site["review_cameras"]:
         data = bpy.data.cameras.get(camera_spec["name"]) or bpy.data.cameras.new(camera_spec["name"])
         camera = bpy.data.objects.get(camera_spec["name"]) or bpy.data.objects.new(camera_spec["name"], data)
@@ -127,7 +160,9 @@ def main():
     }
     building = site["building"]
     build_podium(collections["Architecture_Podium"], building["podium"])
+    build_podium_columns(collections["Architecture_Podium"], building["facade_y"], building["facade_detail"]["podium_column_count"])
     build_towers(collections["Architecture_Towers"], building["towers"], building["floor_height"])
+    build_facade_services(collections["Architecture_Towers"], building["towers"], building["floor_height"], building["facade_detail"])
     build_rooftops(collections["Architecture_Rooftop"], building["towers"])
     build_frontage(collections["Architecture_Entrances"], collections["Architecture_Shops"], building["facade_y"], building["shop_count"])
     build_context(site)

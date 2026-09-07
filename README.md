@@ -501,6 +501,8 @@ blender --background --python scripts/blender_build_blockout.py -- \
 
 Every generated object is marked `ESTIMATED_AWAITING_SURVEY`. The dimensions are an editable modelling baseline—not a claim of surveyed accuracy—and must be calibrated against licensed photographs and measurements before the asset advances beyond blockout.
 
+The current second-stage pass adds facade air-conditioning units and service pipes, a podium column rhythm, individual shop awnings, kerbs, drains, and street lights. See `docs/production-stages.md` for the seven-stage production and acceptance plan.
+
 ## Integration status
 
-The local Git object database contains PR #16 only. It supplies the five-module architecture contract and greybox generator. No remote, additional PR refs, or recoverable dangling commits are present in this checkout, so the PBR contract above completes the missing reviewable foundation locally rather than depending on unavailable PR branches.
+The architecture, PBR, and site manifests are now consumed by one blockout build entry point and checked by one project validator. PR #17 established the integrated foundation; subsequent modelling passes should change the manifests and generators together rather than introducing independent binary-only state.

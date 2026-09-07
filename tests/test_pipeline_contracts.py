@@ -44,6 +44,12 @@ class PipelineContractTests(unittest.TestCase):
         self.assertTrue((SCRIPTS / "blender_material_setup.py").is_file())
         self.assertTrue((SCRIPTS / "blender_build_blockout.py").is_file())
 
+    def test_production_plan_tracks_seven_stages(self):
+        plan = (ROOT / "docs" / "production-stages.md").read_text(encoding="utf-8")
+        self.assertEqual(7, sum(1 for line in plan.splitlines() if line.startswith("| ") and line[2:3].isdigit()))
+        self.assertIn("| 2 |", plan)
+        self.assertIn("進行中", plan)
+
 
 if __name__ == "__main__":
     unittest.main()

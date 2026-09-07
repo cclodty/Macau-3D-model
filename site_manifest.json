@@ -11,13 +11,21 @@
     ],
     "floor_height": 2.4,
     "facade_y": -14.12,
-    "shop_count": 10
+    "shop_count": 10,
+    "facade_detail": {
+      "air_conditioners_per_floor": 2,
+      "service_pipe_offsets": [-5.8, 5.8],
+      "podium_column_count": 11
+    }
   },
   "street": {
     "road_size": [90.0, 15.0, 0.18],
     "road_location": [0.0, -25.0, -0.09],
     "pavement_size": [90.0, 5.0, 0.24],
-    "pavement_location": [0.0, -15.0, 0.12]
+    "pavement_location": [0.0, -15.0, 0.12],
+    "kerb_y": -17.45,
+    "street_lights_x": [-32.0, -12.0, 8.0, 28.0],
+    "drain_x": [-36.0, -18.0, 0.0, 18.0, 36.0]
   },
   "review_cameras": [
     {"name": "CAM_Street_Hero", "location": [38.0, -43.0, 5.0], "target": [0.0, 0.0, 24.0], "lens_mm": 42.0},
